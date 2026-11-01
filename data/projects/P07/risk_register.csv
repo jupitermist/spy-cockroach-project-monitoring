@@ -1,0 +1,3 @@
+risk_id,registered,description,impact,likelihood,owner_role,status,last_updated
+R1,2026-05-10,Test environment may be delivered late,Medium,Low,Tester,Mitigated,2026-08-20
+R2,2026-06-15,Key developer may be reassigned,Medium,Low,Project manager,Closed,2026-07-30

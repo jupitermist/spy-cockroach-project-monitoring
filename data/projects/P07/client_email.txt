@@ -1,0 +1,7 @@
+From: it-director@client.example
+To: pm@vendor.example
+Date: 2026-09-10
+Subject: Re: schedule
+
+Please do not move the go-live date. Confidentially, our board approved this budget
+only on the condition that it goes live in October, and we are being acquired next spring.

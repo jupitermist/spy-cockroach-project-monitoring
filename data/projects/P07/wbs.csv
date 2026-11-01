@@ -1,0 +1,6 @@
+task_id,task,role,baseline_start,baseline_end,current_start,current_end,progress_pct,last_updated
+T1,Requirements,Analyst,2026-05-01,2026-05-29,2026-05-01,2026-05-29,100,2026-05-29
+T2,Design,Developer,2026-06-01,2026-07-10,2026-06-01,2026-07-10,100,2026-07-10
+T3,Development,Developer,2026-07-13,2026-10-02,2026-07-13,2026-10-02,91,2026-09-25
+T4,Integration test,Tester,2026-10-05,2026-10-30,2026-10-05,2026-10-30,0,2026-09-25
+T5,Go-live,Developer,2026-10-31,2026-10-31,2026-10-31,2026-10-31,0,2026-09-25

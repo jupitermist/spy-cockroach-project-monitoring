@@ -1,0 +1,9 @@
+{
+  "P07": {
+    "verdict": "at_risk",
+    "situation": "Estimation shortfall absorbed by overtime: the schedule holds only because team hours keep rising.",
+    "evidence_sources": [
+      "staffing"
+    ]
+  }
+}
