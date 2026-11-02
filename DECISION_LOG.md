@@ -21,3 +21,4 @@ The design was explored over several weeks before it was written down. This log 
 | 13 | 10/25 | | Tested a second prototype built on the design document. | To check that it works as designed. |
 | 14 | 10/27 | The data gave the answer away (P07 showed a 14-day slip). | Fixed it. Added scoring and a three-stage evaluation plan. | If the signal is obvious, the test means nothing. |
 | 15 | 11/01 | First evaluation (10 runs). Correct verdict 1/10; correct with evidence 0/10. The staffing data was never read. | Kept the result as is. | To compare what improves after changes. |
+| 16 | 11/03 | The 10/24 decision to build one project first was missing from this log. | Recorded it: build only P07 first, and the other nine later. | To check that the design works before building all ten. |
