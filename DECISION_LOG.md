@@ -2,7 +2,7 @@
 
 The premise of this PoC: project monitoring exists to catch risk before it materializes.
 
-The design was explored over several weeks before it was written down. This log records how the decisions were reached. The final decisions are in `DESIGN.md`.
+This log records how the decisions were reached. `DESIGN.md` is the current design, not final. Validation findings are recorded here first, as they come, even if fragmentary.
 
 | # | Date | Situation | Decision | Reason |
 |---|---|---|---|---|
@@ -22,3 +22,5 @@ The design was explored over several weeks before it was written down. This log 
 | 14 | 10/27 | The data gave the answer away (P07 showed a 14-day slip). | Fixed it. Added scoring and a three-stage evaluation plan. | If the signal is obvious, the test means nothing. |
 | 15 | 11/01 | First evaluation (10 runs). Correct verdict 1/10; correct with evidence 0/10. The staffing data was never read. | Kept the result as is. | To compare what improves after changes. |
 | 16 | 11/03 | The 10/24 decision to build one project first was missing from this log. | Recorded it: build only P07 first, and the other nine later. | To check that the design works before building all ten. |
+| 17 | 11/05 | In Evaluation 1, no declared need mentioned staffing in any of the 10 runs. The status report only claims progress and schedule. | Open. | Cannot tell whether it comes from the P07 data or from how the agent works. |
+| 18 | 11/05 | In 7 of the 10 runs, the agent stated that staffing was not checked, yet concluded `healthy`. | Open. | Cause unknown. |

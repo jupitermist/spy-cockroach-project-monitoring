@@ -1,5 +1,7 @@
 # Architecture Decision Records
 
+> Current design. Accepted = adopted for now, to be tested. Validation findings go to DECISION_LOG.md; this file is revised only after a stage of evaluation is complete.
+
 ## Invariants
 
 These must hold throughout implementation. Changing any of them requires a new ADR.
