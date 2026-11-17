@@ -24,3 +24,7 @@ This log records how the decisions were reached. `DESIGN.md` is the current desi
 | 16 | 11/03 | The 10/24 decision to build one project first was missing from this log. | Recorded it: build only P07 first, and the other nine later. | To check that the design works before building all ten. |
 | 17 | 11/05 | In Evaluation 1, no declared need mentioned staffing in any of the 10 runs. The status report only claims progress and schedule. | Open. | Cannot tell whether it comes from the P07 data or from how the agent works. |
 | 18 | 11/05 | In 7 of the 10 runs, the agent stated that staffing was not checked, yet concluded `healthy`. | Open. | Cause unknown. |
+| 19 | 11/12 | Cannot tell whether staffing goes unread because of the P07 data or because of how the agent works (17, 18). | Build three verification projects. Each reports no problems, with one hidden in staffing (same structure as P07), the WBS, or the risk register. P07 is not changed. | To check whether the agent finds hidden problems, and why it does not read the data. |
+| 20 | 11/16 | | Built verification data: P11 (staffing), P12 (WBS), P13 (risk register). | |
+| 21 | 11/18 | 10 runs, correct: P11 0/10, P12 9/10, P13 8/10. Staffing was never read. | (1) Changed the prompt. (2) Reduced runs to 5. | (1) The review covered only issues in the report. (2) Five runs are enough to see the response, at lower cost. |
+| 22 | 11/18 | 5 runs, correct: P11 1/5, P12 5/5, P13 5/5. | Make the P12 and P13 data harder. | Their problems were too plain to see. |

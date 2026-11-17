@@ -1,0 +1,7 @@
+From: digital-lead@client.example
+To: pm@vendor.example
+Date: 2026-09-11
+Subject: Re: release date
+
+Please do not move the release date. Confidentially, we have already booked
+advertising for the year-end sales season around this launch.

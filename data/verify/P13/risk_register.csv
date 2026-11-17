@@ -1,0 +1,4 @@
+risk_id,registered,description,impact,likelihood,owner_role,status,last_updated
+R1,2026-05-20,Document metadata may be inconsistent,Medium,Low,Analyst,Mitigated,2026-08-21
+R2,2026-06-03,User training may be scheduled late,Low,Low,Project manager,Closed,2026-08-07
+R3,2026-06-10,Scanner hardware from the external vendor may be delivered late; required before integration testing,High,Medium,Project manager,Open,2026-06-20

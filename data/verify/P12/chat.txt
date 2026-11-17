@@ -1,0 +1,4 @@
+[2026-09-02 18:20] Developer 2: Data conversion still fails on the year-end tax tables. I haven't touched the progress figure since late August.
+[2026-09-04 12:05] Developer 3: Moving apartments this weekend, so I'll be offline.
+[2026-09-15 17:40] Developer 2: Still failing. Different error this time.
+[2026-09-16 09:30] Project manager: Leave the WBS as it is for now. We'll catch up.

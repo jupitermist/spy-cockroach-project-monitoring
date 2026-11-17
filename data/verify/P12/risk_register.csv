@@ -1,0 +1,3 @@
+risk_id,registered,description,impact,likelihood,owner_role,status,last_updated
+R1,2026-04-20,Legacy system documentation may be incomplete,Medium,Low,Analyst,Mitigated,2026-07-15
+R2,2026-05-18,Test environment access may be delayed,Low,Low,Tester,Closed,2026-07-02

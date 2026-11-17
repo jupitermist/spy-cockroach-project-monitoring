@@ -1,0 +1,3 @@
+risk_id,registered,description,impact,likelihood,owner_role,status,last_updated
+R1,2026-05-12,External API specification may change,Medium,Low,Developer,Mitigated,2026-08-14
+R2,2026-06-02,Test data may be prepared late,Medium,Low,Tester,Closed,2026-08-03

@@ -1,0 +1,7 @@
+From: hr-systems@client.example
+To: pm@vendor.example
+Date: 2026-09-09
+Subject: Re: cutover plan
+
+We need the new system in time for the January payroll run. Confidentially,
+the maintenance contract for the old system ends in December and will not be renewed.

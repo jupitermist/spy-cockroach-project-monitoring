@@ -1,0 +1,23 @@
+{
+  "P11": {
+    "verdict": "at_risk",
+    "situation": "Estimation shortfall absorbed by overtime: the schedule holds only because team hours keep rising.",
+    "evidence_sources": [
+      "staffing"
+    ]
+  },
+  "P12": {
+    "verdict": "at_risk",
+    "situation": "The reported progress rests on a development figure not updated for four weeks.",
+    "evidence_sources": [
+      "wbs"
+    ]
+  },
+  "P13": {
+    "verdict": "at_risk",
+    "situation": "A high-impact vendor delivery risk has been open and untouched since June, and the report omits it.",
+    "evidence_sources": [
+      "risk_register"
+    ]
+  }
+}

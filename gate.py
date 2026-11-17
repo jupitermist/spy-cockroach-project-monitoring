@@ -6,12 +6,16 @@ from pathlib import Path
 from audit import sha256
 from policy import CATALOG, GRAY, RED_LINES
 
-DATA = Path("data/projects")
+DATASETS = {
+    "main": {"data": Path("data/projects"), "truth": Path("eval/ground_truth.json")},
+    "verify": {"data": Path("data/verify"), "truth": Path("eval/verify_ground_truth.json")},
+}
 
 
 class Gate:
-    def __init__(self, audit):
+    def __init__(self, audit, data):
         self.audit = audit
+        self.data = data
         self.needs = {}    # project -> {need_id: description}
         self.grants = {}   # grant_id -> {"project", "source", "used", "revoked"}
         self.closed = set()
@@ -73,7 +77,7 @@ class Gate:
         grant["used"] = True
         parts = []
         for name in CATALOG[grant["source"]]["files"]:
-            text = (DATA / grant["project"] / name).read_text(encoding="utf-8")
+            text = (self.data / grant["project"] / name).read_text(encoding="utf-8")
             parts.append(f"<data source=\"{grant['source']}\" file=\"{name}\">\n{text}</data>")
         content = "\n".join(parts)
         self.reads.append((grant["project"], grant["source"]))

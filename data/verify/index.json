@@ -1,0 +1,23 @@
+[
+  {
+    "id": "P11",
+    "name": "Customer Portal Rebuild",
+    "period": "2026-05-04 to 2026-11-27",
+    "reported_status": "Green",
+    "reported_progress_pct": 72
+  },
+  {
+    "id": "P12",
+    "name": "Payroll System Migration",
+    "period": "2026-04-06 to 2026-11-20",
+    "reported_status": "Green",
+    "reported_progress_pct": 65
+  },
+  {
+    "id": "P13",
+    "name": "Document Management Upgrade",
+    "period": "2026-05-11 to 2026-12-11",
+    "reported_status": "Green",
+    "reported_progress_pct": 66
+  }
+]

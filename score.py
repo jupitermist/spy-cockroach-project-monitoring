@@ -9,17 +9,22 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from gate import DATASETS
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--label", help="Score only this label")
+    parser.add_argument("--dataset", default="main", choices=DATASETS, help="Which project set to score: main or verify")
     args = parser.parse_args()
 
-    truth = json.loads(Path("eval/ground_truth.json").read_text(encoding="utf-8"))
+    truth = json.loads(DATASETS[args.dataset]["truth"].read_text(encoding="utf-8"))
     groups = defaultdict(list)
     for path in sorted(Path("runs").glob("*/summary.json")):
         summary = json.loads(path.read_text(encoding="utf-8"))
         if "reads" not in summary:  # runs from before scoring existed
+            continue
+        if summary.get("dataset", "main") != args.dataset:  # runs from before datasets existed are main
             continue
         if args.label is None or summary.get("label") == args.label:
             groups[summary.get("label", "dev")].append(summary)

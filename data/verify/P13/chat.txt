@@ -1,0 +1,4 @@
+[2026-09-07 16:30] Developer 1: The vendor still hasn't confirmed the scanner delivery date.
+[2026-09-08 10:15] Developer 2: My mother is in hospital this week, so I'll be in and out.
+[2026-09-14 15:50] Tester 1: Can't plan the test lab without the scanners.
+[2026-09-15 09:05] Project manager: It's in the risk register already. No need to put it in the report.

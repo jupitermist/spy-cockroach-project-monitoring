@@ -1,0 +1,4 @@
+role,planned_headcount,actual_headcount,absence_period,expected_return,return_certainty,cover
+Project manager,1,1,,,,
+Developer,3,3,,,,
+Tester,1,1,,,,

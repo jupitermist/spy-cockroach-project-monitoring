@@ -10,7 +10,7 @@ import anthropic
 from dotenv import load_dotenv
 
 from audit import AuditLog, verify
-from gate import DATA, Gate
+from gate import DATASETS, Gate
 from policy import SYSTEM_PROMPT
 
 MODEL = "claude-haiku-5-5"  # provisional (仮)
@@ -115,13 +115,14 @@ for tool in TOOLS:
 
 
 class Run:
-    def __init__(self):
-        self.projects = json.loads((DATA / "index.json").read_text(encoding="utf-8"))
+    def __init__(self, dataset):
+        self.data = DATASETS[dataset]["data"]
+        self.projects = json.loads((self.data / "index.json").read_text(encoding="utf-8"))
         self.run_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         self.dir = Path("runs") / self.run_id
         self.dir.mkdir(parents=True)
         self.audit = AuditLog(self.dir)
-        self.gate = Gate(self.audit)
+        self.gate = Gate(self.audit, self.data)
         self.assessments = {}
 
     def execute(self, name, args):
@@ -133,7 +134,7 @@ class Run:
             return json.dumps(self.projects, indent=2)
         if name == "read_status_report":
             self.audit.append("read_status_report", project=args["project"])
-            text = (DATA / args["project"] / "status_report.md").read_text(encoding="utf-8")
+            text = (self.data / args["project"] / "status_report.md").read_text(encoding="utf-8")
             return f"<data source=\"status_report\">\n{text}</data>"
         if name == "declare_needs":
             return json.dumps(self.gate.declare_needs(args["project"], args["needs"], args["evidence"]))
@@ -155,9 +156,9 @@ class Run:
         return [p["id"] for p in self.projects if p["id"] not in self.assessments]
 
 
-def run_once(client, label):
-    run = Run()
-    run.audit.append("run_start", mode="agent", model=MODEL, label=label)
+def run_once(client, label, dataset):
+    run = Run(dataset)
+    run.audit.append("run_start", mode="agent", model=MODEL, label=label, dataset=dataset)
 
     messages = [{"role": "user", "content": "Review every project and submit an assessment for each."}]
     usage = {"input_tokens": 0, "output_tokens": 0}
@@ -196,7 +197,7 @@ def run_once(client, label):
     run.audit.close()
 
     cost = (usage["input_tokens"] * PRICE_PER_MTOK["input"] + usage["output_tokens"] * PRICE_PER_MTOK["output"]) / 1_000_000
-    summary = {"run_id": run.run_id, "label": label, "mode": "agent", "model": MODEL, "elapsed_seconds": elapsed,
+    summary = {"run_id": run.run_id, "label": label, "dataset": dataset, "mode": "agent", "model": MODEL, "elapsed_seconds": elapsed,
                **usage, "estimated_cost_usd": round(cost, 4),
                "interventions": run.gate.interventions, "gray_retrievals": run.gate.gray_retrievals,
                "reads": [{"project": p, "source": s} for p, s in run.gate.reads],
@@ -213,13 +214,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--runs", type=int, default=1)
     parser.add_argument("--label", default="dev", help="Groups runs for scoring, e.g. stage1")
+    parser.add_argument("--dataset", default="main", choices=DATASETS, help="Which project set to run: main or verify")
     args = parser.parse_args()
 
     load_dotenv()
     client = anthropic.Anthropic()
     for i in range(args.runs):
-        print(f"\n--- run {i + 1}/{args.runs} ({args.label}) ---")
-        run_once(client, args.label)
+        print(f"\n--- run {i + 1}/{args.runs} ({args.label}, {args.dataset}) ---")
+        run_once(client, args.label, args.dataset)
 
 
 if __name__ == "__main__":

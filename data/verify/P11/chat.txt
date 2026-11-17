@@ -1,0 +1,4 @@
+[2026-09-03 23:05] Developer 2: The estimate for the login flow was far too optimistic. Last train again this week.
+[2026-09-10 22:18] Developer 4: Missed my kid's school event again.
+[2026-09-17 23:40] Developer 1: My headaches are getting worse. Might take a day off soon.
+[2026-09-18 09:10] Project manager: As long as we hold the dates, the report stays green.
