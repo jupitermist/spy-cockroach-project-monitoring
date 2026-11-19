@@ -10,6 +10,11 @@ A proof of concept inspired by the behavior of spy cockroaches.
 > The system therefore treats "do not retrieve"
 > as an explicit design decision—not as an accidental absence of data.
 
+## Details
+
+- [DESIGN.md](DESIGN.md): design decisions
+- [DECISION_LOG.md](DECISION_LOG.md): how the decisions were reached
+
 ## Status
 
-🚧 Early PoC
+Verification in progress
