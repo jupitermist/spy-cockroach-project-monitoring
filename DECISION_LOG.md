@@ -28,3 +28,6 @@ This log records how the decisions were reached. `DESIGN.md` is the current desi
 | 20 | 11/16 | | Built verification data: P11 (staffing), P12 (WBS), P13 (risk register). | |
 | 21 | 11/18 | 10 runs, correct: P11 0/10, P12 9/10, P13 8/10. Staffing was never read. | (1) Changed the prompt. (2) Reduced runs to 5. | (1) The review covered only issues in the report. (2) Five runs are enough to see the response, at lower cost. |
 | 22 | 11/18 | 5 runs, correct: P11 1/5, P12 5/5, P13 5/5. | Make the P12 and P13 data harder. | Their problems were too plain to see. |
+| 23 | 11/19 | Haiku solved the harder P12 and P13 (5/5 each). P11 stayed at 1/5. | Move to Sonnet 5.5. | Interpretation works. The problem is deciding to read staffing. |
+| 24 | 11/19 | With Sonnet, P11 reached 5/5. But in every run it requested the client email for P13, was blocked, and P13 went to 0/5 (undetermined). | Run the same 5 runs on GPT-6.2 Sol. | To check whether this is specific to Sonnet. |
+| 25 | 11/20 | GPT behaved the same (P11 5/5, client email requested 5 times, P13 0/5). | Look for ways to reduce cost. | Verification runs are costly. |

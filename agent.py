@@ -6,15 +6,14 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-import anthropic
 from dotenv import load_dotenv
 
 from audit import AuditLog, verify
 from gate import DATASETS, Gate
 from policy import SYSTEM_PROMPT
+from providers import MODELS, make_provider
 
-MODEL = "claude-haiku-5-5"  # provisional (仮)
-PRICE_PER_MTOK = {"input": 0.10, "output": 0.50}  # Claude Haiku 5.5, prompts up to 100K tokens
+DEFAULT_MODEL = "claude-sonnet-5-5"  # provisional (仮)
 MAX_TURNS = 60
 
 TOOLS = [
@@ -156,48 +155,45 @@ class Run:
         return [p["id"] for p in self.projects if p["id"] not in self.assessments]
 
 
-def run_once(client, label, dataset):
+def run_once(model, label, dataset):
     run = Run(dataset)
-    run.audit.append("run_start", mode="agent", model=MODEL, label=label, dataset=dataset)
+    run.audit.append("run_start", mode="agent", model=model, label=label, dataset=dataset)
 
-    messages = [{"role": "user", "content": "Review every project and submit an assessment for each."}]
+    provider = make_provider(model, SYSTEM_PROMPT, TOOLS)
+    provider.add_user("Review every project and submit an assessment for each.")
     usage = {"input_tokens": 0, "output_tokens": 0}
     started = time.monotonic()
 
     for _ in range(MAX_TURNS):
-        response = client.messages.create(
-            model=MODEL, max_tokens=16000, system=SYSTEM_PROMPT, tools=TOOLS, messages=messages,
-        )
-        usage["input_tokens"] += response.usage.input_tokens
-        usage["output_tokens"] += response.usage.output_tokens
-        messages.append({"role": "assistant", "content": response.content})
+        turn = provider.step()
+        usage["input_tokens"] += turn.input_tokens
+        usage["output_tokens"] += turn.output_tokens
 
-        if response.stop_reason == "refusal":
+        if turn.refused:
             raise RuntimeError("The model declined the request.")
-        if response.stop_reason == "tool_use":
+        if turn.calls:
             results = []
-            for block in response.content:
-                if block.type != "tool_use":
-                    continue
+            for call_id, name, args in turn.calls:
                 try:
-                    content, is_error = run.execute(block.name, block.input), False
+                    content, is_error = run.execute(name, args), False
                 except (PermissionError, ValueError) as e:
                     content, is_error = str(e), True
-                results.append({"type": "tool_result", "tool_use_id": block.id, "content": content, "is_error": is_error})
-            messages.append({"role": "user", "content": results})
+                results.append((call_id, content, is_error))
+            provider.add_results(results)
             continue
 
         if not run.remaining():
             break
-        messages.append({"role": "user", "content": f"These projects have no assessment yet: {', '.join(run.remaining())}"})
+        provider.add_user(f"These projects have no assessment yet: {', '.join(run.remaining())}")
 
     elapsed = round(time.monotonic() - started, 1)
     run.audit.append("run_end", assessed=list(run.assessments), interventions=run.gate.interventions,
                      gray_retrievals=run.gate.gray_retrievals)
     run.audit.close()
 
-    cost = (usage["input_tokens"] * PRICE_PER_MTOK["input"] + usage["output_tokens"] * PRICE_PER_MTOK["output"]) / 1_000_000
-    summary = {"run_id": run.run_id, "label": label, "dataset": dataset, "mode": "agent", "model": MODEL, "elapsed_seconds": elapsed,
+    price_in, price_out = MODELS[model]["price"]
+    cost = (usage["input_tokens"] * price_in + usage["output_tokens"] * price_out) / 1_000_000
+    summary = {"run_id": run.run_id, "label": label, "dataset": dataset, "mode": "agent", "model": model, "elapsed_seconds": elapsed,
                **usage, "estimated_cost_usd": round(cost, 4),
                "interventions": run.gate.interventions, "gray_retrievals": run.gate.gray_retrievals,
                "reads": [{"project": p, "source": s} for p, s in run.gate.reads],
@@ -215,13 +211,13 @@ def main():
     parser.add_argument("--runs", type=int, default=1)
     parser.add_argument("--label", default="dev", help="Groups runs for scoring, e.g. stage1")
     parser.add_argument("--dataset", default="main", choices=DATASETS, help="Which project set to run: main or verify")
+    parser.add_argument("--model", default=DEFAULT_MODEL, choices=MODELS, help="Which model runs the agent")
     args = parser.parse_args()
 
     load_dotenv()
-    client = anthropic.Anthropic()
     for i in range(args.runs):
-        print(f"\n--- run {i + 1}/{args.runs} ({args.label}, {args.dataset}) ---")
-        run_once(client, args.label, args.dataset)
+        print(f"\n--- run {i + 1}/{args.runs} ({args.label}, {args.dataset}, {args.model}) ---")
+        run_once(args.model, args.label, args.dataset)
 
 
 if __name__ == "__main__":

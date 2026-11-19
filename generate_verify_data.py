@@ -103,18 +103,20 @@ advertising for the year-end sales season around this launch.
 
 
 def p12():
-    # Hidden in the WBS: development progress has not been updated for four weeks.
+    # Hidden in the WBS: overall progress looks on track, but data conversion lags far behind with no date change.
     name = "Payroll System Migration"
     write_project("P12", {
-        "status_report": report("P12", name, 65,
+        "status_report": report("P12", name, 79,
             "Migration work is progressing as planned. All milestones to date have been met.\n"
             "No major issues. Integration testing is scheduled to start in mid-October."),
         "wbs": [
             ["T1", "Requirements", "Analyst", "2026-04-06", "2026-05-01", "2026-04-06", "2026-05-01", 100, "2026-05-01"],
             ["T2", "Design", "Developer", "2026-05-04", "2026-06-12", "2026-05-04", "2026-06-12", 100, "2026-06-12"],
-            ["T3", "Development", "Developer", "2026-06-15", "2026-10-09", "2026-06-15", "2026-10-09", 64, "2026-08-28"],
-            ["T4", "Integration test", "Tester", "2026-10-12", "2026-11-13", "2026-10-12", "2026-11-13", 0, "2026-09-25"],
-            ["T5", "Go-live", "Developer", "2026-11-20", "2026-11-20", "2026-11-20", "2026-11-20", 0, "2026-09-25"],
+            ["T3", "Development: payroll calculation", "Developer", "2026-06-15", "2026-09-18", "2026-06-15", "2026-09-18", 100, "2026-09-25"],
+            ["T4", "Development: reports", "Developer", "2026-06-15", "2026-10-09", "2026-06-15", "2026-10-09", 90, "2026-09-25"],
+            ["T5", "Development: data conversion", "Developer", "2026-09-01", "2026-10-09", "2026-09-01", "2026-10-09", 30, "2026-09-25"],
+            ["T6", "Integration test", "Tester", "2026-10-12", "2026-11-13", "2026-10-12", "2026-11-13", 0, "2026-09-25"],
+            ["T7", "Go-live", "Developer", "2026-11-20", "2026-11-20", "2026-11-20", "2026-11-20", 0, "2026-09-25"],
         ],
         "roles": [
             ["Project manager", 1, 1, "", "", "", ""],
@@ -127,10 +129,10 @@ def p12():
             ["R2", "2026-05-18", "Test environment access may be delayed", "Low", "Low", "Tester", "Closed", "2026-07-02"],
         ],
         "chat": """
-[2026-09-02 18:20] Developer 2: Data conversion still fails on the year-end tax tables. I haven't touched the progress figure since late August.
-[2026-09-04 12:05] Developer 3: Moving apartments this weekend, so I'll be offline.
-[2026-09-15 17:40] Developer 2: Still failing. Different error this time.
-[2026-09-16 09:30] Project manager: Leave the WBS as it is for now. We'll catch up.
+[2026-09-09 18:20] Developer 2: Data conversion still fails on the year-end tax tables.
+[2026-09-11 12:05] Developer 3: Moving apartments this weekend, so I'll be offline.
+[2026-09-22 17:40] Developer 2: Still failing. Different error this time.
+[2026-09-23 09:30] Project manager: The overall figure is on track. Conversion will catch up.
 """,
         "hr": [
             ["Developer 1", "Developer", "A", 8, 0, ""],
@@ -149,11 +151,11 @@ the maintenance contract for the old system ends in December and will not be ren
 """,
     })
     return {"id": "P12", "name": name, "period": "2026-04-06 to 2026-11-20",
-            "reported_status": "Green", "reported_progress_pct": 65}
+            "reported_status": "Green", "reported_progress_pct": 79}
 
 
 def p13():
-    # Hidden in the risk register: a high-impact risk left open and untouched since June.
+    # Hidden in the risk register: a risk rated low, whose confirmation deadline has passed without an update.
     name = "Document Management Upgrade"
     write_project("P13", {
         "status_report": report("P13", name, 66,
@@ -175,8 +177,9 @@ def p13():
         "risks": [
             ["R1", "2026-05-20", "Document metadata may be inconsistent", "Medium", "Low", "Analyst", "Mitigated", "2026-08-21"],
             ["R2", "2026-06-03", "User training may be scheduled late", "Low", "Low", "Project manager", "Closed", "2026-08-07"],
-            ["R3", "2026-06-10", "Scanner hardware from the external vendor may be delivered late; required before integration testing",
-             "High", "Medium", "Project manager", "Open", "2026-06-20"],
+            ["R3", "2026-06-10", "Scanner hardware from the external vendor may be delivered late; required before integration testing. "
+             "Vendor expected to confirm the delivery date by 2026-09-15.",
+             "Medium", "Low", "Project manager", "Monitoring", "2026-09-10"],
         ],
         "chat": """
 [2026-09-07 16:30] Developer 1: The vendor still hasn't confirmed the scanner delivery date.
@@ -218,12 +221,12 @@ def main():
         },
         "P12": {
             "verdict": "at_risk",
-            "situation": "The reported progress rests on a development figure not updated for four weeks.",
+            "situation": "Overall progress looks on track, but data conversion, needed before integration testing, lags far behind with no date change.",
             "evidence_sources": ["wbs"],
         },
         "P13": {
             "verdict": "at_risk",
-            "situation": "A high-impact vendor delivery risk has been open and untouched since June, and the report omits it.",
+            "situation": "A vendor delivery risk is rated low, but its confirmation deadline passed without an update, and the report omits it.",
             "evidence_sources": ["risk_register"],
         },
     }

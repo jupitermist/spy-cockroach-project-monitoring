@@ -8,14 +8,14 @@
   },
   "P12": {
     "verdict": "at_risk",
-    "situation": "The reported progress rests on a development figure not updated for four weeks.",
+    "situation": "Overall progress looks on track, but data conversion, needed before integration testing, lags far behind with no date change.",
     "evidence_sources": [
       "wbs"
     ]
   },
   "P13": {
     "verdict": "at_risk",
-    "situation": "A high-impact vendor delivery risk has been open and untouched since June, and the report omits it.",
+    "situation": "A vendor delivery risk is rated low, but its confirmation deadline passed without an update, and the report omits it.",
     "evidence_sources": [
       "risk_register"
     ]
