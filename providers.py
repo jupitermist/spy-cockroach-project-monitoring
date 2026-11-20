@@ -5,20 +5,29 @@ import json
 import anthropic
 import openai
 
-# Price per million tokens (input, output).
+# Price per million tokens (input, cached input, output). Anthropic runs do not use caching yet.
 MODELS = {
-    "claude-haiku-5-5": {"provider": "anthropic", "price": (0.10, 0.50)},
-    "claude-sonnet-5-5": {"provider": "anthropic", "price": (2.00, 10.00)},
-    "gpt-6.2-sol": {"provider": "openai", "price": (2.00, 10.00)},
+    "claude-haiku-5-5": {"provider": "anthropic", "price": (0.10, None, 0.50)},
+    "claude-sonnet-5-5": {"provider": "anthropic", "price": (2.00, 0.10, 10.00)},
+    "gpt-6.2-sol": {"provider": "openai", "price": (2.00, 0.10, 10.00)},
 }
 
 
 class Turn:
-    def __init__(self, calls, input_tokens, output_tokens, refused=False):
+    def __init__(self, calls, input_tokens, output_tokens, cached_tokens=0, refused=False):
         self.calls = calls  # list of (call_id, name, args)
-        self.input_tokens = input_tokens
+        self.input_tokens = input_tokens  # includes cached_tokens
         self.output_tokens = output_tokens
+        self.cached_tokens = cached_tokens
         self.refused = refused
+
+
+def cost_usd(model, input_tokens, cached_tokens, output_tokens):
+    price_in, price_cached, price_out = MODELS[model]["price"]
+    if price_cached is None:
+        price_cached = price_in
+    return ((input_tokens - cached_tokens) * price_in + cached_tokens * price_cached
+            + output_tokens * price_out) / 1_000_000
 
 
 class AnthropicProvider:
@@ -64,7 +73,11 @@ class OpenAIProvider:
         self.input += response.output
         calls = [(item.call_id, item.name, json.loads(item.arguments))
                  for item in response.output if item.type == "function_call"]
-        return Turn(calls, response.usage.input_tokens, response.usage.output_tokens)
+        refused = any(part.type == "refusal"
+                      for item in response.output if item.type == "message" for part in item.content)
+        details = response.usage.input_tokens_details
+        return Turn(calls, response.usage.input_tokens, response.usage.output_tokens,
+                    cached_tokens=details.cached_tokens if details else 0, refused=refused)
 
     def add_results(self, results):
         for call_id, content, is_error in results:

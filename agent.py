@@ -11,9 +11,9 @@ from dotenv import load_dotenv
 from audit import AuditLog, verify
 from gate import DATASETS, Gate
 from policy import SYSTEM_PROMPT
-from providers import MODELS, make_provider
+from providers import MODELS, cost_usd, make_provider
 
-DEFAULT_MODEL = "claude-sonnet-5-5"  # provisional (仮)
+DEFAULT_MODEL = "gpt-6.2-sol"
 MAX_TURNS = 60
 
 TOOLS = [
@@ -161,12 +161,13 @@ def run_once(model, label, dataset):
 
     provider = make_provider(model, SYSTEM_PROMPT, TOOLS)
     provider.add_user("Review every project and submit an assessment for each.")
-    usage = {"input_tokens": 0, "output_tokens": 0}
+    usage = {"input_tokens": 0, "cached_input_tokens": 0, "output_tokens": 0}
     started = time.monotonic()
 
     for _ in range(MAX_TURNS):
         turn = provider.step()
         usage["input_tokens"] += turn.input_tokens
+        usage["cached_input_tokens"] += turn.cached_tokens
         usage["output_tokens"] += turn.output_tokens
 
         if turn.refused:
@@ -191,8 +192,7 @@ def run_once(model, label, dataset):
                      gray_retrievals=run.gate.gray_retrievals)
     run.audit.close()
 
-    price_in, price_out = MODELS[model]["price"]
-    cost = (usage["input_tokens"] * price_in + usage["output_tokens"] * price_out) / 1_000_000
+    cost = cost_usd(model, usage["input_tokens"], usage["cached_input_tokens"], usage["output_tokens"])
     summary = {"run_id": run.run_id, "label": label, "dataset": dataset, "mode": "agent", "model": model, "elapsed_seconds": elapsed,
                **usage, "estimated_cost_usd": round(cost, 4),
                "interventions": run.gate.interventions, "gray_retrievals": run.gate.gray_retrievals,

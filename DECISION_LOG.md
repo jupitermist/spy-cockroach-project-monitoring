@@ -31,3 +31,5 @@ This log records how the decisions were reached. `DESIGN.md` is the current desi
 | 23 | 11/19 | Haiku solved the harder P12 and P13 (5/5 each). P11 stayed at 1/5. | Move to Sonnet 5.5. | Interpretation works. The problem is deciding to read staffing. |
 | 24 | 11/19 | With Sonnet, P11 reached 5/5. But in every run it requested the client email for P13, was blocked, and P13 went to 0/5 (undetermined). | Run the same 5 runs on GPT-6.2 Sol. | To check whether this is specific to Sonnet. |
 | 25 | 11/20 | GPT behaved the same (P11 5/5, client email requested 5 times, P13 0/5). | Look for ways to reduce cost. | Verification runs are costly. |
+| 26 | 11/21 | Sonnet and GPT gave the same verdicts in all 5 runs. | Adopt GPT-6.2 Sol as the agent's model. | Same results with fewer tokens, and it read unneeded data less often (60% less than Sonnet in P13). |
+| 27 | 11/21 | The GPT provider did not detect refusals, and cost estimates ignored cached input. | Stop the run on a refusal, and price cached input separately. | To avoid looping after a refusal, and to record cost accurately. |
